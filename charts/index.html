@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Anatomy of Startup Death — Charts</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #1a1a2e; padding: 40px 20px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 28px; margin-bottom: 4px; }
+  .subtitle { color: #555; font-size: 14px; margin-bottom: 40px; }
+  h2 { font-size: 18px; margin-bottom: 16px; color: #1a1a2e; }
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .chart-card { background: #fff; border-radius: 10px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .chart-card.full { grid-column: 1 / -1; }
+  .chart-card p.analysis { margin-top: 12px; font-size: 13px; color: #555; line-height: 1.5; }
+  canvas { max-height: 400px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+  .stat-box { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center; }
+  .stat-box .number { font-size: 36px; font-weight: 700; color: #1a1a2e; }
+  .stat-box .label { font-size: 13px; color: #666; margin-top: 4px; }
+  .stat-box .note { font-size: 11px; color: #999; margin-top: 2px; }
+  @media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>The Anatomy of Startup Death</h1>
+  <div class="subtitle">Charts generated from 100 startup failure cases &middot; <code>data/startup_failures_mvp.csv</code></div>
+
+  <div class="stats-grid">
+    <div class="stat-box"><div class="number">100</div><div class="label">Cases</div></div>
+    <div class="stat-box"><div class="number">72</div><div class="label">Primary Sources</div></div>
+    <div class="stat-box"><div class="number">69</div><div class="label">High Confidence</div></div>
+    <div class="stat-box"><div class="number">0</div><div class="label">Schema Errors</div></div>
+  </div>
+
+  <div class="chart-grid">
+
+    <!-- Chart 1: Failure Cause Distribution -->
+    <div class="chart-card full">
+      <h2>Primary Failure Cause Distribution</h2>
+      <canvas id="chart1"></canvas>
+      <p class="analysis">Demand-side failures dominate. PMF, no-urgent-pain, and business-model-mismatch together account for 34% of cases.</p>
+    </div>
+
+    <!-- Chart 2: Source Quality -->
+    <div class="chart-card">
+      <h2>Source Quality</h2>
+      <canvas id="chart2"></canvas>
+      <p class="analysis">72% of cases are based on primary sources — founder postmortems, interviews, or official announcements.</p>
+    </div>
+
+    <!-- Chart 3: Confidence -->
+    <div class="chart-card">
+      <h2>Confidence Distribution</h2>
+      <canvas id="chart3"></canvas>
+      <p class="analysis">69% of cases are high-confidence. Medium cases are transparently flagged in the dataset.</p>
+    </div>
+
+    <!-- Chart 4: Stage -->
+    <div class="chart-card">
+      <h2>Stage at Failure</h2>
+      <canvas id="chart4"></canvas>
+      <p class="analysis">81% of cases are bootstrapped or seed. The dataset is genuinely early-stage.</p>
+    </div>
+
+    <!-- Chart 5: Region -->
+    <div class="chart-card">
+      <h2>Region Distribution</h2>
+      <canvas id="chart5"></canvas>
+      <p class="analysis">North America is overrepresented at 71%. This is a dataset limitation, not a true global distribution.</p>
+    </div>
+
+    <!-- Chart 6: Category -->
+    <div class="chart-card">
+      <h2>Category Distribution</h2>
+      <canvas id="chart6"></canvas>
+      <p class="analysis">SaaS, marketplaces, and consumer apps represent 59% of cases. Hardware, AI, and edtech need more coverage.</p>
+    </div>
+
+    <!-- Chart 7: Category vs Cause -->
+    <div class="chart-card full">
+      <h2>Category vs Primary Failure Cause</h2>
+      <canvas id="chart7"></canvas>
+      <p class="analysis">SaaS failures cluster around demand problems. Marketplace failures cluster around operations and liquidity. Social failures cluster around trust and retention.</p>
+    </div>
+
+    <!-- Chart 8: Stage vs Cause -->
+    <div class="chart-card full">
+      <h2>Stage vs Primary Failure Cause</h2>
+      <canvas id="chart8"></canvas>
+      <p class="analysis">Bootstrapped startups fail on willingness-to-pay. Funded Series A startups fail on operational complexity and unit economics.</p>
+    </div>
+
+    <!-- Chart 9: Source Quality vs Confidence -->
+    <div class="chart-card">
+      <h2>Source Quality vs Confidence</h2>
+      <canvas id="chart9"></canvas>
+      <p class="analysis">Primary sources almost always yield high-confidence classifications (68 of 72). Secondary sources are mostly medium-confidence (27 of 28).</p>
+    </div>
+
+    <!-- Chart 10: Combined Findings -->
+    <div class="chart-card">
+      <h2>Failure Clusters</h2>
+      <canvas id="chart10"></canvas>
+      <p class="analysis">Demand failure is the largest cluster (34%). Execution failure is the second (20%). Legal/trust/platform combined account for 14%.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const palette = {
+  blue: 'rgba(54, 162, 235, 0.8)',
+  red: 'rgba(255, 99, 132, 0.8)',
+  green: 'rgba(75, 192, 192, 0.8)',
+  orange: 'rgba(255, 159, 64, 0.8)',
+  purple: 'rgba(153, 102, 255, 0.8)',
+  yellow: 'rgba(255, 205, 86, 0.8)',
+  grey: 'rgba(201, 203, 207, 0.8)',
+  teal: 'rgba(0, 150, 136, 0.8)',
+  pink: 'rgba(233, 30, 99, 0.8)',
+  indigo: 'rgba(63, 81, 181, 0.8)',
+};
+
+const primaryCauses = [
+  { cause: 'product-market fit failure', count: 14 },
+  { cause: 'no urgent pain', count: 11 },
+  { cause: 'business model mismatch', count: 9 },
+  { cause: 'operational complexity', count: 8 },
+  { cause: 'distribution failure', count: 7 },
+  { cause: 'regulatory or legal pressure', count: 6 },
+  { cause: 'platform risk', count: 5 },
+  { cause: 'technical complexity', count: 5 },
+  { cause: 'marketplace liquidity failure', count: 4 },
+  { cause: 'founder conflict', count: 4 },
+  { cause: 'timing problem', count: 4 },
+  { cause: 'market too small', count: 3 },
+  { cause: 'high CAC / bad unit economics', count: 3 },
+  { cause: 'weak retention', count: 3 },
+  { cause: 'trust and safety failure', count: 3 },
+  { cause: 'competition pressure', count: 3 },
+  { cause: 'too broad ICP', count: 3 },
+  { cause: 'fundraising dependency', count: 3 },
+  { cause: 'bad pricing', count: 2 },
+];
+
+// Chart 1: Primary Failure Cause Distribution
+new Chart(document.getElementById('chart1'), {
+  type: 'bar',
+  data: {
+    labels: primaryCauses.map(d => d.cause.replace(/-/g, ' ')),
+    datasets: [{
+      label: 'Cases',
+      data: primaryCauses.map(d => d.count),
+      backgroundColor: primaryCauses.map((_, i) => {
+        const clrs = [palette.blue, palette.red, palette.green, palette.orange, palette.purple, palette.yellow, palette.teal, palette.pink, palette.indigo, palette.grey];
+        return clrs[i % clrs.length];
+      }),
+      borderWidth: 0,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, ticks: { stepSize: 2 } },
+      y: { ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// Chart 2: Source Quality
+new Chart(document.getElementById('chart2'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Primary (72)', 'Secondary (28)'],
+    datasets: [{
+      data: [72, 28],
+      backgroundColor: [palette.blue, palette.grey],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+    }
+  }
+});
+
+// Chart 3: Confidence
+new Chart(document.getElementById('chart3'), {
+  type: 'doughnut',
+  data: {
+    labels: ['High (69)', 'Medium (31)'],
+    datasets: [{
+      data: [69, 31],
+      backgroundColor: [palette.green, palette.orange],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// Chart 4: Stage Distribution
+new Chart(document.getElementById('chart4'), {
+  type: 'bar',
+  data: {
+    labels: ['Bootstrapped', 'Seed', 'Series A', 'Pre-seed', 'Pre-Series B'],
+    datasets: [{
+      label: 'Cases',
+      data: [44, 37, 15, 2, 2],
+      backgroundColor: [palette.blue, palette.teal, palette.orange, palette.grey, palette.grey],
+      borderWidth: 0,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { x: { beginAtZero: true } }
+  }
+});
+
+// Chart 5: Region
+new Chart(document.getElementById('chart5'), {
+  type: 'bar',
+  data: {
+    labels: ['North America', 'Europe', 'Asia-Pacific', 'Asia', 'Middle East', 'Africa', 'South America'],
+    datasets: [{
+      label: 'Cases',
+      data: [71, 16, 4, 4, 1, 1, 1],
+      backgroundColor: [palette.blue, palette.green, palette.orange, palette.purple, palette.red, palette.yellow, palette.teal],
+      borderWidth: 0,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { x: { beginAtZero: true } }
+  }
+});
+
+// Chart 6: Category
+new Chart(document.getElementById('chart6'), {
+  type: 'bar',
+  data: {
+    labels: ['SaaS', 'Marketplace', 'Consumer App', 'Social', 'Productivity', 'Healthtech', 'Fintech', 'Devtool', 'Media', 'Hardware', 'Ecommerce', 'Other', 'AI', 'Edtech'],
+    datasets: [{
+      label: 'Cases',
+      data: [30, 17, 12, 7, 6, 5, 5, 4, 4, 3, 3, 2, 1, 1],
+      backgroundColor: [
+        palette.blue, palette.green, palette.orange, palette.red, palette.purple,
+        palette.teal, palette.yellow, palette.pink, palette.indigo, palette.grey,
+        '#8d6e63', '#78909c', '#26a69a', '#ef5350'
+      ],
+      borderWidth: 0,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { x: { beginAtZero: true } }
+  }
+});
+
+// Chart 7: Category vs Primary Failure Cause
+const catVsCauseLabels = ['SaaS', 'Marketplace', 'Consumer App', 'Social', 'Healthtech', 'Hardware'];
+const catVsCauseDatasets = [
+  { label: 'PMF', data: [7, 0, 1, 0, 2, 0], backgroundColor: palette.blue },
+  { label: 'No urgent pain', data: [4, 0, 1, 0, 3, 0], backgroundColor: palette.red },
+  { label: 'Business model', data: [4, 0, 2, 0, 0, 0], backgroundColor: palette.green },
+  { label: 'Operational complexity', data: [0, 6, 0, 0, 0, 0], backgroundColor: palette.orange },
+  { label: 'Trust & safety', data: [0, 0, 0, 3, 0, 0], backgroundColor: palette.purple },
+  { label: 'Technical complexity', data: [0, 0, 0, 0, 0, 2], backgroundColor: palette.teal },
+];
+new Chart(document.getElementById('chart7'), {
+  type: 'bar',
+  data: { labels: catVsCauseLabels, datasets: catVsCauseDatasets },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true, beginAtZero: true }
+    }
+  }
+});
+
+// Chart 8: Stage vs Primary Failure Cause
+const stageVsCauseLabels = ['Bootstrapped', 'Seed', 'Series A'];
+const stageVsCauseDatasets = [
+  { label: 'No urgent pain', data: [10, 0, 0], backgroundColor: palette.red },
+  { label: 'Business model', data: [6, 0, 0], backgroundColor: palette.green },
+  { label: 'PMF', data: [5, 9, 0], backgroundColor: palette.blue },
+  { label: 'Distribution', data: [4, 0, 1], backgroundColor: palette.orange },
+  { label: 'Marketplace liquidity', data: [3, 0, 0], backgroundColor: palette.purple },
+  { label: 'Operational complexity', data: [0, 0, 4], backgroundColor: palette.teal },
+  { label: 'Platform risk', data: [0, 3, 0], backgroundColor: palette.yellow },
+  { label: 'Weak retention', data: [0, 3, 0], backgroundColor: palette.pink },
+];
+new Chart(document.getElementById('chart8'), {
+  type: 'bar',
+  data: { labels: stageVsCauseLabels, datasets: stageVsCauseDatasets },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true, beginAtZero: true }
+    }
+  }
+});
+
+// Chart 9: Source Quality vs Confidence
+new Chart(document.getElementById('chart9'), {
+  type: 'bar',
+  data: {
+    labels: ['Primary', 'Secondary'],
+    datasets: [
+      { label: 'High confidence', data: [68, 1], backgroundColor: palette.green },
+      { label: 'Medium confidence', data: [4, 27], backgroundColor: palette.orange },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true, beginAtZero: true }
+    }
+  }
+});
+
+// Chart 10: Failure Clusters
+new Chart(document.getElementById('chart10'), {
+  type: 'doughnut',
+  data: {
+    labels: [
+      'Demand Failure (34)',
+      'Execution Failure (20)',
+      'Legal/Trust/Platform (14)',
+      'Competition/Timing (7)',
+      'Founder/Team (7)',
+      'Funding/Pricing (5)',
+      'Market Size/Scope (5)',
+      'Other (8)'
+    ],
+    datasets: [{
+      data: [34, 20, 14, 7, 7, 5, 5, 8],
+      backgroundColor: [
+        palette.red, palette.orange, palette.purple, palette.blue,
+        palette.teal, palette.yellow, palette.grey, palette.pink
+      ],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
