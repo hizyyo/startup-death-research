@@ -121,6 +121,18 @@ More detailed analysis is available in:
 
 `charts/index.html` — interactive Chart.js dashboard with 10 charts, open in any browser.
 
+## Case Studies
+
+Deep-dive analyses of selected cases:
+
+- RethinkDB: open-source devtool that could not monetize developer adoption
+- Dinnr: meal-kit startup that built a solution without verifying urgent demand
+- DynaDomains: domain marketplace with $3M supply but zero demand
+- MyCity: govtech SaaS selling to a process that did not exist
+- Cam.ly: hardware startup that could not finish the product before funding ran out
+
+All case studies: `phase-3-analysis/case_studies/`
+
 ## Analysis Files
 
 - `phase-3-analysis/summary_statistics.md`: summary statistics from the 100-case dataset
@@ -172,8 +184,19 @@ startup-death-research/
     project_one_pager.md             # One-page project summary
     charts.md                        # Chart descriptions with data
     medium_confidence_audit.md       # Audit of medium-confidence cases
+  phase-3-analysis/
+    ...
+    case_studies/                    # Deep-dive case studies (5 files)
+      index.md
+      01_rethinkdb.md
+      02_dinnr.md
+      03_dynadomains.md
+      04_mycity.md
+      05_camly.md
   charts/
     index.html                       # Interactive Chart.js dashboard
+  scripts/
+    archive_sources.ps1              # Wayback Machine archival script
   DATA_DICTIONARY.md                 # Full field reference
   LICENSE                            # MIT + CC BY 4.0
   .gitignore
@@ -194,22 +217,30 @@ The project should be read as a structured study of public startup failure narra
 
 ## Status
 
-- Phase 1: foundation and taxonomy complete
-- Phase 2: 100-case MVP dataset complete
-- Phase 3: analysis and public packaging in progress
+| Phase | Status |
+|---|---|
+| Phase 1: Foundation & Taxonomy | Complete |
+| Phase 2: 100-case MVP Dataset | Complete |
+| Phase 3: Analysis & Packaging | In progress |
+| Phase 4: Research Report (20–40 page PDF) | Not started |
+| Phase 5: Public Website | Not started |
+| Phase 6: Death Similarity Score | Not started |
+| Phase 7: Dataset Expansion to 300–500 | Not started |
+| Phase 8: Founder Interviews | Not started |
+| Phase 9: Public Launch | Not started |
+| Phase 10: 10/10 Polish | Not started |
 
-## Next Steps
+Full roadmap: `phase-3-analysis/phase_3_roadmap.md`
 
-- [x] build 100-case MVP dataset
-- [x] dataset validation
-- [x] medium-confidence audit
+## Next Steps (Immediate)
+
+- [x] 100-case MVP dataset built and validated
 - [x] interactive charts dashboard
-- [x] data dictionary
-- [x] license
-- [ ] archive important source URLs
+- [x] data dictionary and license
+- [x] GitHub repository
+- [x] 5 deep-dive case studies
+- [ ] archive important source URLs (script ready: `scripts/archive_sources.ps1`)
 - [ ] write additional research memos
-- [ ] improve non-US coverage in future versions
-- [ ] build a small public website or interactive dataset browser
 
 ## Suggested Citation
 

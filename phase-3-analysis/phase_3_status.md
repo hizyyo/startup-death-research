@@ -6,23 +6,31 @@
 
 Phase 3 analysis and public packaging is underway.
 
-Core Phase 3 foundation is complete.
+After Phase 3: Phase 4 (Research Report), Phase 5 (Website), Phase 6 (Similarity Tool), Phase 7 (Dataset Expansion to 300–500), Phase 8 (Founder Interviews), Phase 9 (Public Launch), Phase 10 (10/10 Polish).
 
 ## Completed Artifacts
 
-- `phase_3_roadmap.md`
-- `dataset_audit.md`
-- `summary_statistics.md`
-- `analysis_tables.md`
-- `limitations.md`
-- `research_memo_001.md`
-- `admissions_summary.md`
-- `landing_page_copy.md`
-- `README.md`
+Phase 3 progress:
+
+- [x] `phase_3_roadmap.md` — full project roadmap
+- [x] `dataset_audit.md` — quality audit of 100 cases
+- [x] `summary_statistics.md` — summary statistics
+- [x] `analysis_tables.md` — generated analysis tables
+- [x] `limitations.md` — methodological limitations
+- [x] `research_memo_001.md` — first research memo
+- [x] `admissions_summary.md` — admissions-facing summary
+- [x] `landing_page_copy.md` — website copy
+- [x] `project_one_pager.md` — one-page summary
+- [x] `charts.md` — chart descriptions
+- [x] `medium_confidence_audit.md` — audit of all 31 medium cases
+- [x] `charts/index.html` — interactive Chart.js dashboard
+- [x] `DATA_DICTIONARY.md` — full field reference
+- [x] `LICENSE` — MIT + CC BY 4.0
+- [x] GitHub repository created and pushed
 
 ## Dataset Status
 
-- Dataset size: 100 cases
+- Dataset size: 100 cases (MVP)
 - Validation status: passed
 - Unique IDs: 100
 - Duplicate ID groups: 0
@@ -37,41 +45,46 @@ Core Phase 3 foundation is complete.
 - Medium-confidence cases: 31
 - Low-confidence cases: 0
 
-## Current Public Framing
-
-The project should be framed as:
-
-> A structured public dataset and taxonomy of 100 early-stage startup failure cases based on public postmortem evidence.
-
-Avoid framing it as:
-
-> A model that predicts why startups die.
-
 ## What Is Strong Now
 
-- Clear research question
 - 100-case structured dataset
-- Strong source-quality ratio
-- Explicit taxonomy
-- Dataset schema
+- 72% primary sources
+- 69% high confidence
+- Transparent methodology
 - Honest limitations
-- First research memo
-- Public README
+- Interactive charts
+- Research memo
 - Admissions-facing summary
+- Public GitHub with README
 
-## Remaining Improvements
+## Completed In Phase 3 (This Session)
 
-Before public launch, the strongest next improvements are:
+- [x] 5 deep-dive case studies (RethinkDB, Dinnr, DynaDomains, MyCity, Cam.ly)
+- [x] Case studies index page
+- [x] Archive script created (`scripts/archive_sources.ps1`)
 
-- create charts from `analysis_tables.md`
-- archive source URLs
-- audit all 31 medium-confidence cases
-- create a clean GitHub repository structure
-- convert `README_draft.md` into either archive material or remove it after final README is accepted
-- create a short visual project one-pager
+## Remaining In Phase 3
 
-## Recommendation
+- [ ] Run archive script to preserve all source URLs
+- [ ] Second research memo
+- [ ] Final consistency check
 
-The project is already strong enough to be described as an independent research project.
+## After Phase 3
 
-The next work should improve presentation and trust, not expand the dataset.
+See `phase_3_roadmap.md` for detailed plans on:
+
+- Phase 4: Research Report (20–40 page PDF)
+- Phase 5: Public Website (interactive explorer)
+- Phase 6: Death Similarity Score (rule-based matching tool)
+- Phase 7: Dataset Expansion to 300–500 cases
+- Phase 8: Original Founder Interviews
+- Phase 9: Public Launch (HN, Reddit, Product Hunt)
+- Phase 10: 10/10 Polish
+
+## Key Framing
+
+> This is empirical research on startup failure patterns using structured public postmortem data.
+
+The project is already strong enough to be described as independent research for admissions.
+
+The remaining phases turn it from impressive-for-a-student into genuinely useful research infrastructure.
