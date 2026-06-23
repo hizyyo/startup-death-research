@@ -62,12 +62,29 @@ Phase 3 progress:
 - [x] 5 deep-dive case studies (RethinkDB, Dinnr, DynaDomains, MyCity, Cam.ly)
 - [x] Case studies index page
 - [x] Archive script created (`scripts/archive_sources.ps1`)
+- [x] Research Memo 002: Business Models and Failure Patterns
+- [x] Final consistency check passed
 
 ## Remaining In Phase 3
 
-- [ ] Run archive script to preserve all source URLs
-- [ ] Second research memo
-- [ ] Final consistency check
+- [ ] Run archive script to preserve all source URLs (requires working internet; script ready)
+
+## Consistency Check Results
+
+| Check | Result |
+|---|---|
+| Total rows | 100 |
+| Missing evidence_summary | 0 |
+| Missing primary_failure_cause | 0 |
+| Missing source_url | 0 |
+| Missing confidence_score | 0 |
+| Missing notes | 0 |
+| High confidence + secondary source | 0 |
+| Medium confidence + primary source | 0 |
+| Case studies match dataset | ✅ All 5 confirmed |
+| Cause distribution matches charts/tables | ✅ Confirmed |
+
+Phase 3 is effectively complete. The only remaining item is running the archive script, which requires a network environment where the Wayback Machine API is reachable.
 
 ## After Phase 3
 
