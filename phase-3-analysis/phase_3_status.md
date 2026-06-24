@@ -65,9 +65,19 @@ Phase 3 progress:
 - [x] Research Memo 002: Business Models and Failure Patterns
 - [x] Final consistency check passed
 
-## Remaining In Phase 3
+## Archived URLs Status
 
-- [ ] Run archive script to preserve all source URLs (requires working internet; script ready)
+| Metric | Count |
+|---|---|
+| Total source URLs | 100 |
+| Successfully archived | 36 |
+| Failed (timeout) | 10 |
+| Not yet attempted | 54 |
+| Success rate (of attempted) | 78% |
+
+The archive process is partially complete. Wayback Machine save API is unstable from this connection — most failures are timeouts to medium.com and techcrunch.com. The script supports resume.
+
+**To resume:** run `scripts/archive_sources.ps1` from a connection where archive.org is more responsive.
 
 ## Consistency Check Results
 
