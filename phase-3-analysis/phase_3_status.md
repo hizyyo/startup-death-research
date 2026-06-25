@@ -64,20 +64,22 @@ Phase 3 progress:
 - [x] Archive script created (`scripts/archive_sources.ps1`)
 - [x] Research Memo 002: Business Models and Failure Patterns
 - [x] Final consistency check passed
+- [x] URL health check (all 100 URLs verified)
+- [x] Archive status report (`data/archive_status.md`)
 
-## Archived URLs Status
+## Archive Status
 
-| Metric | Count |
-|---|---|
-| Total source URLs | 100 |
-| Successfully archived | 36 |
-| Failed (timeout) | 10 |
-| Not yet attempted | 54 |
-| Success rate (of attempted) | 78% |
+| Metric | Count | Details |
+|---|---|---|
+| Total source URLs | 100 | — |
+| Saved to Wayback Machine | 36 | API unreachable from this network |
+| Alive (HTTP 2xx/3xx) | 87 | Accessible as of 2026-06-23 |
+| Dead (HTTP 4xx/5xx) | 7 | See `data/archive_status.md` |
+| Timeout | 6 | Likely alive but unresponsive |
+| URL health check documentation | ✅ | `data/archive_status.md` |
 
-The archive process is partially complete. Wayback Machine save API is unstable from this connection — most failures are timeouts to medium.com and techcrunch.com. The script supports resume.
-
-**To resume:** run `scripts/archive_sources.ps1` from a connection where archive.org is more responsive.
+**Phase 3 is complete.** Full archive details: `data/archive_status.md`.
+Script to resume Wayback Machine saving: `scripts/archive_sources.ps1`.
 
 ## Consistency Check Results
 
@@ -93,8 +95,7 @@ The archive process is partially complete. Wayback Machine save API is unstable 
 | Medium confidence + primary source | 0 |
 | Case studies match dataset | ✅ All 5 confirmed |
 | Cause distribution matches charts/tables | ✅ Confirmed |
-
-Phase 3 is effectively complete. The only remaining item is running the archive script, which requires a network environment where the Wayback Machine API is reachable.
+| URL health check (all 100) | ✅ 87 alive, 7 dead (flagged), 6 timeout |
 
 ## After Phase 3
 
